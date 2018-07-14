@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.8] - 2018-07-14
+- Set metrics lifetime, default admin password and mailing domain from environmet variables.
+- Create new users if using email address when invitate to collaborate or own apps.
+- Add script for testing docker image locally.
+- Source-maps support (Check https://github.com/knotel/meteor-apm-client).
+- Option to separate endpoints for webapp servers & client browsers.
+- Update Meteor to 1.6.1.1
+
 ## [1.0.7] - 2018-01-23
 ### Fixed
 - Fix aggregation bug [#17](https://github.com/lmachens/meteor-apm-server/pull/17)
