@@ -204,6 +204,16 @@ function notifyPendingCollaborator(inviteId, app, email, newUser) {
     inviteUrl: inviteUrl,
     appName: _.escape(app.name)
   });
+
+  if (newUser) {
+    options.html = EmailTemplates.notifyForNewCollaborator({
+      appLink: appUrl,
+      inviteUrl: inviteUrl,
+      appName: _.escape(app.name),
+      invitePass: invitePass
+    });
+  }
+
   options.to = email;
   const subjectTmpl = i18n('share.pending_user_invite_email_tmpl_subject');
   options.subject = _.template(subjectTmpl)({
@@ -223,6 +233,16 @@ function notifyPendingOwner(inviteId, app, email, newUser) {
     inviteUrl: inviteUrl,
     appName: _.escape(app.name)
   });
+  
+  if (newUser) {
+    options.html = EmailTemplates.notifyForNewOwner({
+      appLink: appUrl,
+      inviteUrl: inviteUrl,
+      appName: _.escape(app.name),
+      invitePass: invitePass
+    });
+  }
+
   options.to = email;
   const pendingOwnerSubjectTempl = i18n('share.notify_new_owner_subject');
   options.subject = _.template(pendingOwnerSubjectTempl)({
