@@ -10,6 +10,7 @@ dockerImageName=knotel/meteor-apm-server
 MONGO_URL='mongodb://apm.db.mydomain.com/apm-app?replicaSet=apmRS'
 MONGO_OPLOG_URL='mongodb://apm.db.mydomain.com/local?replicaSet=apmRS'
 MAIL_URL='smtp://apm%40mydomainmail.com:mypassword@smtp.mailgun.org:587'
+MAIL_DOMAIN=$HOSTNAME
 ENGINE_PORT=11011
 API_PORT=7007
 ROOT_URL='https://'$HOSTNAME
