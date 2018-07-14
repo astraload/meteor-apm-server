@@ -25,7 +25,7 @@ app.use(require('./lib/middlewares/simplentp')());
 app.use(require('./lib/middlewares/cors-options'));
 
 var port = process.env.ENGINE_PORT || 11011;
-console.info('Kadira engine started on port', port);
+console.info('Meteor APM engine started on port', port);
 http.createServer(app).listen(port);
 
 // parse JSON data sent using XDR with has data type set to text/plain

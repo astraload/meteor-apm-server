@@ -1,6 +1,8 @@
 EmailConfig = {};
 
+var emailDomain = process.env.MAIL_DOMAIN || 'dummydomain.com'
+
 EmailConfig.from = {
-  from: 'Kadira <no-reply@kadira.io>',
-  subject: 'Kadira: Performance Monitoring for Meteor'
+  from: 'Meteor APM <no-reply@' + emailDomain + '>',
+  subject: 'Application Performance Monitoring for Meteor'
 };
