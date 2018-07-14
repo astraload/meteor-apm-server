@@ -1,7 +1,7 @@
 {
   "name": "meteor-apm-server",
-  "version": "1.0.7",
-  "description": "This is the server project of meteor apm (formerly known as kadira).",
+  "version": "1.0.8",
+  "description": "This is the server project of Meteor APM (formerly known as kadira).",
   "directories": {
     "test": "tests"
   },

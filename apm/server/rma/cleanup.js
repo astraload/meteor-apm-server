@@ -1,5 +1,5 @@
 // Set maximum metrics lifetime (Default 7 days)
-const metricsLifetime = Meteor.settings.metricsLifetime || 1000 * 60 * 60 * 24 * 7;
+const metricsLifetime = process.env.METRICS_LIFETIME || 1000 * 60 * 60 * 24 * 7;
 const rawCollections = [RawErrorMetrics, RawMethodsMetrics, RawPubMetrics, RawSystemMetrics];
 const collections = [ErrorMetrics, MethodsMetrics, PubMetrics, SystemMetrics];
 

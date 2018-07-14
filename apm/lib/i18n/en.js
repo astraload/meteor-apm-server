@@ -27,7 +27,7 @@ strings.common = {
   delete: 'Delete',
   share_this: 'SHARE THIS',
   show_hosts: 'Show Hosts',
-  site_name: 'Kadira',
+  site_name: 'Meteor APM',
   analyze: 'Analyze',
   upgrade: 'Upgrade'
 };
@@ -62,7 +62,7 @@ strings.apps = {
 strings.app = {
   configure_your_app: 'Configure Your App',
   config_install_pkg: 'Install our Smart Package',
-  config_connect_code: 'Connect to Kadira using one of the following methods.',
+  config_connect_code: 'Connect to Meteor APM server using one of the following methods.',
   config_configurations: 'Raw AppId and appSecret',
   config_other_way: 'If you need to configure your app in some other way',
   app_id: 'App ID',
@@ -105,16 +105,18 @@ strings.share = {
   pending_collaborators: 'Pending Collaborators',
   pending_user_invite_email_tmpl_subject: 'Accept Invitation for App: <%= appName %>',
   collaborator_invite_email_tmpl:
-    "Hello, <br/><br> Congratulations! You now have access to <b><%= appName %></b> on Kadira. <br> Please <a href='<%= inviteUrl %>'>Visit Kadira</a> to begin.<br>If you are new to Kadira, you can log in using your email and 'kadira2018' as a password. Please, change your password after the first logon!<br><br>Thank You!",
-  new_app_owner_not_registered:
-    '{$1} is not a registered user in Kadira. Please ask him to register first.',
+    "Hello, <br/><br> Congratulations! You now have access to <b><%= appName %></b> on Meteor APM. <br> Please <a href='<%= inviteUrl %>'>Click this invitation link</a> to begin.",
+  new_collaborator_invite_email_tmpl:
+    "Hello, <br/><br> Congratulations! You now have access to <b><%= appName %></b> on Meteor APM. <br> Please <a href='<%= inviteUrl %>'>Click this invitation link</a> to begin.<br>It seems you are new to Meteor APM, you can log in using your email and <%= invitePass %> as a password. You can change your password after the first logon!",
   invite_not_found: 'Invite not found',
   invite_again_success: 'Invited again successfully',
   already_invited_collaborator: 'You have added this collaborator already',
   failed_to_add_collaborator: 'failed to add collaborator',
   notify_new_owner_subject: 'You received ownership of application : <%= appName %>',
   notify_new_owner_email_templ:
-    "Hello, <br/><br> Congratulations! You are invited to become the owner of application <a href='<%= appLink %>'><%= appName %></a> on Kadira. Click <a href='<%= inviteUrl %>'> here </a> to accept invitation.<br>If you are new to Kadira, you can log in using your email and 'kadira2018' as a password. Please, change your password after the first logon!<br><br>Thank You!",
+    "Hello, <br/><br> Congratulations! You are invited to become the owner of application <a href='<%= appLink %>'><%= appName %></a> on Meteor APM. Click <a href='<%= inviteUrl %>'> here </a> to accept invitation.",
+  notify_for_new_owner_email_templ: 
+    "Hello, <br/><br> Congratulations! You are invited to become the owner of application <a href='<%= appLink %>'><%= appName %></a> on Meteor APM. Click <a href='<%= inviteUrl %>'> here </a> to accept invitation.<br>It seems you are new to Meteor APM, you can log in using your email and <%= invitePass %> as a password. You can change your password after the first logon!",
   change_owner_not_permitted: 'You are not authorized to change app ownership',
   remove_collaborator_success: 'Collaborator removed successfully',
   add_collaborator_success: 'Collaborator added successfully',
@@ -234,7 +236,7 @@ strings.alerts = {
 };
 
 strings.emails = {
-  reset_password_subject: 'Reset your Kadira passsword'
+  reset_password_subject: 'Reset your Meteor APM passsword'
 };
 
 strings.profiler = {
