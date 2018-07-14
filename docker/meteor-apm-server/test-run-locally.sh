@@ -50,24 +50,26 @@ API_PORT=7007
 ROOT_URL='http://'$HOSTNAME
 PORT=3000
 ADMIN_PASSWORD=admin2018
+METRICS_LIFETIME=604800000
 
-$sudo docker run -d                     \
-    --name apm                          \
-    --hostname localhost                \
-    -p 3000:3000                        \
-    -p 11011:11011                      \
-    -p 7007:7007                        \
-    -v $root_directory/logs:/logs       \
-    -e MONGO_URL=$MONGO_URL             \
-    -e MONGO_OPLOG_URL=$MONGO_OPLOG_URL \
-    -e MAIL_URL=$MAIL_URL               \
-    -e MAIL_DOMAIN=$MAIL_DOMAIN         \
-    -e ENGINE_PORT=$ENGINE_PORT         \
-    -e API_PORT=$API_PORT               \
-    -e ROOT_URL=$ROOT_URL               \
-    -e PORT=$PORT                       \
-    -e ADMIN_PASSWORD=$ADMIN_PASSWORD   \
-    --link apm-mongo:apm-mongo          \
+$sudo docker run -d                       \
+    --name apm                            \
+    --hostname localhost                  \
+    -p 3000:3000                          \
+    -p 11011:11011                        \
+    -p 7007:7007                          \
+    -v $root_directory/logs:/logs         \
+    -e MONGO_URL=$MONGO_URL               \
+    -e MONGO_OPLOG_URL=$MONGO_OPLOG_URL   \
+    -e MAIL_URL=$MAIL_URL                 \
+    -e MAIL_DOMAIN=$MAIL_DOMAIN           \
+    -e ENGINE_PORT=$ENGINE_PORT           \
+    -e API_PORT=$API_PORT                 \
+    -e ROOT_URL=$ROOT_URL                 \
+    -e PORT=$PORT                         \
+    -e ADMIN_PASSWORD=$ADMIN_PASSWORD     \
+    -e METRICS_LIFETIME=$METRICS_LIFETIME \
+    --link apm-mongo:apm-mongo            \
     $dockerImageName:$dockerTag
 
 
