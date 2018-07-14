@@ -7,7 +7,7 @@ Feel free to contribute!
 ## Running it
 
 A mongo replica set is required!
-Check 'docker/meteor-apm-server/deploy-to-host-example.sh' for settings consumed by node.js and meteor and deployment options.
+Check 'docker/meteor-apm-server/deploy-to-host-example.sh' for settings consumed by node.js, meteor and deployment options.
 
 This uses the following ports:
 
@@ -20,7 +20,6 @@ You can use the steps below to build your own APM image.
 cd docker/meteor-apm-server
 ./build.sh
 ./push-to-registry.sh
-./deploy-to-host.sh
 ```
 The build script uses our meteor-base images for building and running meteor application bundles. See `docker/meteor-base/` for details.
 
@@ -28,11 +27,39 @@ The build script uses our meteor-base images for building and running meteor app
 
 If running on new Replica Set, the app creates 'admin' user:
 email: admin@admin.com
-password: 'admin' by default, or from ADMIN_PASSWORD environment variable.
+password: admin
+Default admin password can be overrided with ADMIN_PASSWORD environment variable.
 
-When inviting new users to collaborate or own the app, new entries are added to the collection 'users' with their emails as logins and rendomly generated password. Then ivitation link is sended using settings from 'MAIL_URL' environment variable. Users can change their passwords after logon.
+When inviting new users to collaborate or own the app, new entries are added to the collection 'users' with their emails as logins. Passwords are rendomly generated and can be found in logs (useful when there is no email provider credentials). Then ivitation link is sended using settings from 'MAIL_URL' & 'MAIL_DOMAIN' environment variables. Users can change their passwords after first logon.
 
-If you don't have any mail server settings, you can manually add users to the app in 'apps' collection:
+If you don't have any mail server settings, you can manually create users in 'users' collection. The following example creates new user with 'changeAfterLogon' password:
+```
+db.users.insert({
+    "_id" : "ZTx86k4b5vpqMzr98",
+    "createdAt" : ISODate("2018-01-08T12:34:51.172Z"),
+    "services" : {
+        "password" : {
+            "bcrypt" : "$2a$10$UHAbwU4DznmhNZbO..Ub9.51bL1gOUbfNT4lNGYbPEoFBaNqRCXd6"
+        },
+        "resume" : {
+            "loginTokens" : []
+        }
+    },
+    "username" : "exampleUser",
+    "emails" : [ 
+        {
+            "address" : "email@example.com",
+            "verified" : true
+        }
+    ],
+    "states" : {
+        "__inited" : 1515415494812.0,
+        "activated" : 1515415674900.0
+    }
+})
+```
+
+Adding user as a collaborator to the app in 'apps' collection:
 ```
     "perAppTeam" : [ 
         {
@@ -44,28 +71,42 @@ If you don't have any mail server settings, you can manually add users to the ap
 
 
 ## Meteor apm settings
-`metricsLifetime` sets the maximum lifetime of the metrics. Old metrics are removed after each aggregation.
-The default value is 604800000 (1000 * 60 * 60 * 24 * 7 ^= 7 days).
+Environment variable `METRICS_LIFETIME` sets the maximum lifetime of the metrics. Old metrics are removed after each aggregation.
+The default value is 604800000 (1000 * 60 * 60 * 24 * 7 ^= 7 days). You can set any custom value (for ex. 259200000 = 3 days) with:
+```
+-e METRICS_LIFETIME=259200000
+```
 
+## Connect your app to Meteor APM server via Meteor Settings:
+1) . Add following into your `settings.json` file:
 ```
-"metricsLifetime": 604800000
-```
-
-## Meteor client settings
-```
-"kadira": {
-    "appId": "...",
-    "appSecret": "...",
+"kadira": { 
+    "appId": "<appId>",
+    "appSecret": "<appSecret>",
     "options": {
-        "endpoint": "http://kadira.mydomain.com:11011",
-        "sourceMap": "true",
-        "hash": "f84dea983ab7c071b0ac038b26a9ad11899c062b"
+        "endpoint": "http://apm.mydomain.com:11011",
+        "sourceMap": "true" <<-- OPTIONAL
     }
 },
 ```
+Check https://github.com/knotel/meteor-apm-client to know more about "sourceMap" option & adding source-maps support to your apps.
+
+If your APM instance is running the same private subnet as your application server, you can set separate endpoints for webapp servers (private network) and for client browsers (public network):
+```
+"kadira": { 
+    "appId": "<appId>",
+    "appSecret": "<appSecret>",
+    "options": {
+        "endpoint": "http://apm.mydomain.internal:11011",
+        "webClientEndpoint": "http://apm.mydomain.com:11011"
+    }
+},
+```
+
+
 ### ATTENTION! As most webapps work using HTTPS, metrics and errors should be collected using HTTPS connection to APM, too. You can build NGINX image for it, using example settings provided in ./docker/nginx folder of this repo.
 
-## Changes to original Kadira
+## Changes to original project:
 
 * Reduce to one project
 * Added MongoDB indexes
@@ -76,7 +117,4 @@ The default value is 604800000 (1000 * 60 * 60 * 24 * 7 ^= 7 days).
 * Replace invalid links to old kadira docs
 * Dockerized bundle
 * Source-maps support (with knotel:meteor-apm-client package)
-
-## ToDo
-
-* Direct db access of alertsman (apm/server/alertsman/server.js) and remove api (apm/server/api/server.js)
+* Create users using email address for sending collaboration or ownership invitations
