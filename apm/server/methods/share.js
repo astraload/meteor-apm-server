@@ -22,10 +22,9 @@ Meteor.methods({
       invitedAt: new Date()
     };
     var inviteId = PendingUsers.insert(inviteInfo);
-    var newUser = false
     if (!Meteor.users.findOne({ username: email })) {
-     newUser = true;
      var invitePass = Random.id();
+     console.log('Generated password for user' + email + ' >>> ', invitePass);
      Accounts.createUser({
        username: email,
        email: email,
@@ -34,7 +33,7 @@ Meteor.methods({
      });
     }
 
-    notifyPendingOwner(inviteId, app, email, newUser);
+    notifyPendingOwner(inviteId, app, email, invitePass);
 
   },
   'share.addCollaborator': function(appId, email) {
@@ -66,10 +65,9 @@ Meteor.methods({
       invitedAt: new Date()
     };
     var inviteId = PendingUsers.insert(inviteInfo);
-    var newUser = false
     if (!Meteor.users.findOne({ username: email })) {
-     newUser = true;
      var invitePass = Random.id();
+     console.log('Generated password for user' + email + ' >>> ', invitePass);
      Accounts.createUser({
        username: email,
        email: email,
@@ -78,7 +76,7 @@ Meteor.methods({
      });
     }
 
-    notifyPendingCollaborator(inviteId, app, email, newUser);
+    notifyPendingCollaborator(inviteId, app, email, invitePass);
 
   },
   'share.acceptInvite': function(inviteId) {
@@ -186,24 +184,36 @@ Meteor.methods({
     }
 
     var app = Apps.findOne(invite.app);
-    var newUser = false
     if (invite.type === 'owner') {
-      notifyPendingOwner(inviteId, app, invite.email, newUser);
+      notifyPendingOwner(inviteId, app, invite.email);
     } else {
-      notifyPendingCollaborator(inviteId, app, invite.email, newUser);
+      notifyPendingCollaborator(inviteId, app, invite.email);
     }
   }
 });
 
-function notifyPendingCollaborator(inviteId, app, email, newUser) {
+function notifyPendingCollaborator(inviteId, app, email, invitePass) {
   var inviteUrl = Meteor.absoluteUrl('invite/' + inviteId);
   var appUrl = Meteor.absoluteUrl('apps/' + app._id + '/methods/overview');
   var options = EmailConfig.from;
-  options.html = EmailTemplates.notifyNewCollaborator({
-    appLink: appUrl,
-    inviteUrl: inviteUrl,
-    appName: _.escape(app.name)
-  });
+
+  if (typeof invitePass !== 'undefined') {
+    console.log('Password for user' + email + ' >>> ', invitePass);
+    options.html = EmailTemplates.notifyForNewCollaborator({
+      appLink: appUrl,
+      inviteUrl: inviteUrl,
+      appName: _.escape(app.name),
+      invitePass: invitePass
+    });
+  }
+  else {
+    options.html = EmailTemplates.notifyNewCollaborator({
+      appLink: appUrl,
+      inviteUrl: inviteUrl,
+      appName: _.escape(app.name)
+    });
+  }
+
   options.to = email;
   const subjectTmpl = i18n('share.pending_user_invite_email_tmpl_subject');
   options.subject = _.template(subjectTmpl)({
@@ -214,15 +224,28 @@ function notifyPendingCollaborator(inviteId, app, email, newUser) {
   });
 }
 
-function notifyPendingOwner(inviteId, app, email, newUser) {
+function notifyPendingOwner(inviteId, app, email, invitePass) {
   var inviteUrl = Meteor.absoluteUrl('invite/' + inviteId);
   var appUrl = Meteor.absoluteUrl('apps/' + app._id + '/methods/overview');
   var options = EmailConfig.from;
-  options.html = EmailTemplates.notifyNewOwner({
-    appLink: appUrl,
-    inviteUrl: inviteUrl,
-    appName: _.escape(app.name)
-  });
+  
+  if (typeof invitePass !== 'undefined') {
+    console.log('Password for user' + email + ' >>> ', invitePass);
+    options.html = EmailTemplates.notifyForNewOwner({
+      appLink: appUrl,
+      inviteUrl: inviteUrl,
+      appName: _.escape(app.name),
+      invitePass: invitePass
+    });
+  }
+  else {
+    options.html = EmailTemplates.notifyNewOwner({
+      appLink: appUrl,
+      inviteUrl: inviteUrl,
+      appName: _.escape(app.name)
+    });
+  }
+
   options.to = email;
   const pendingOwnerSubjectTempl = i18n('share.notify_new_owner_subject');
   options.subject = _.template(pendingOwnerSubjectTempl)({

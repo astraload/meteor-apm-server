@@ -107,7 +107,7 @@ strings.share = {
   collaborator_invite_email_tmpl:
     "Hello, <br/><br> Congratulations! You now have access to <b><%= appName %></b> on Meteor APM. <br> Please <a href='<%= inviteUrl %>'>Click this invitation link</a> to begin.",
   new_collaborator_invite_email_tmpl:
-    "Hello, <br/><br> Congratulations! You now have access to <b><%= appName %></b> on Meteor APM. <br> Please <a href='<%= inviteUrl %>'>Click this invitation link</a> to begin.<br>It seems you are new to Meteor APM, you can log in using your email and <%= invitePass %> as a password. You can change your password after the first logon!<br><br>Thank You!",
+    "Hello, <br/><br> Congratulations! You now have access to <b><%= appName %></b> on Meteor APM. <br> Please <a href='<%= inviteUrl %>'>Click this invitation link</a> to begin.<br>It seems you are new to Meteor APM, you can log in using your email and <%= invitePass %> as a password. You can change your password after the first logon!",
   invite_not_found: 'Invite not found',
   invite_again_success: 'Invited again successfully',
   already_invited_collaborator: 'You have added this collaborator already',
@@ -116,7 +116,7 @@ strings.share = {
   notify_new_owner_email_templ:
     "Hello, <br/><br> Congratulations! You are invited to become the owner of application <a href='<%= appLink %>'><%= appName %></a> on Meteor APM. Click <a href='<%= inviteUrl %>'> here </a> to accept invitation.",
   notify_for_new_owner_email_templ: 
-    "Hello, <br/><br> Congratulations! You are invited to become the owner of application <a href='<%= appLink %>'><%= appName %></a> on Meteor APM. Click <a href='<%= inviteUrl %>'> here </a> to accept invitation.<br>It seems you are new to Meteor APM, you can log in using your email and <%= invitePass %> as a password. You can change your password after the first logon!<br><br>Thank You!",
+    "Hello, <br/><br> Congratulations! You are invited to become the owner of application <a href='<%= appLink %>'><%= appName %></a> on Meteor APM. Click <a href='<%= inviteUrl %>'> here </a> to accept invitation.<br>It seems you are new to Meteor APM, you can log in using your email and <%= invitePass %> as a password. You can change your password after the first logon!",
   change_owner_not_permitted: 'You are not authorized to change app ownership',
   remove_collaborator_success: 'Collaborator removed successfully',
   add_collaborator_success: 'Collaborator added successfully',
