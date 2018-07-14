@@ -14,6 +14,7 @@ ENGINE_PORT=11011
 API_PORT=7007
 ROOT_URL='https://'$HOSTNAME
 PORT=3000
+ADMIN_PASSWORD=admin2018
 
 function launchServiceOnServer {
   echo "
@@ -39,6 +40,7 @@ function launchServiceOnServer {
      -e API_PORT=$API_PORT               \
      -e ROOT_URL=$ROOT_URL               \
      -e PORT=$PORT                       \
+     -e ADMIN_PASSWORD=$ADMIN_PASSWORD   \
     $dockerImageName                  && \
     docker rmi $dockerImageName:old 2>/dev/null"
 }

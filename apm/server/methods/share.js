@@ -22,16 +22,19 @@ Meteor.methods({
       invitedAt: new Date()
     };
     var inviteId = PendingUsers.insert(inviteInfo);
-    notifyPendingOwner(inviteId, app, email);
-
+    var newUser = false
     if (!Meteor.users.findOne({ username: email })) {
+     newUser = true;
+     var invitePass = Random.id();
      Accounts.createUser({
        username: email,
        email: email,
-       password: 'kadira2018',
+       password: invitePass,
        plan: 'business'
      });
     }
+
+    notifyPendingOwner(inviteId, app, email, newUser);
 
   },
   'share.addCollaborator': function(appId, email) {
@@ -63,16 +66,19 @@ Meteor.methods({
       invitedAt: new Date()
     };
     var inviteId = PendingUsers.insert(inviteInfo);
-    notifyPendingCollaborator(inviteId, app, email);
-
+    var newUser = false
     if (!Meteor.users.findOne({ username: email })) {
+     newUser = true;
+     var invitePass = Random.id();
      Accounts.createUser({
        username: email,
        email: email,
-       password: 'kadira2018',
+       password: invitePass,
        plan: 'business'
      });
     }
+
+    notifyPendingCollaborator(inviteId, app, email, newUser);
 
   },
   'share.acceptInvite': function(inviteId) {
@@ -180,15 +186,16 @@ Meteor.methods({
     }
 
     var app = Apps.findOne(invite.app);
+    var newUser = false
     if (invite.type === 'owner') {
-      notifyPendingOwner(inviteId, app, invite.email);
+      notifyPendingOwner(inviteId, app, invite.email, newUser);
     } else {
-      notifyPendingCollaborator(inviteId, app, invite.email);
+      notifyPendingCollaborator(inviteId, app, invite.email, newUser);
     }
   }
 });
 
-function notifyPendingCollaborator(inviteId, app, email) {
+function notifyPendingCollaborator(inviteId, app, email, newUser) {
   var inviteUrl = Meteor.absoluteUrl('invite/' + inviteId);
   var appUrl = Meteor.absoluteUrl('apps/' + app._id + '/methods/overview');
   var options = EmailConfig.from;
@@ -207,7 +214,7 @@ function notifyPendingCollaborator(inviteId, app, email) {
   });
 }
 
-function notifyPendingOwner(inviteId, app, email) {
+function notifyPendingOwner(inviteId, app, email, newUser) {
   var inviteUrl = Meteor.absoluteUrl('invite/' + inviteId);
   var appUrl = Meteor.absoluteUrl('apps/' + app._id + '/methods/overview');
   var options = EmailConfig.from;
