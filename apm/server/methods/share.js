@@ -24,7 +24,7 @@ Meteor.methods({
     var inviteId = PendingUsers.insert(inviteInfo);
     if (!Meteor.users.findOne({ username: email })) {
      var invitePass = Random.id();
-     console.log('Generated password for user' + email + ' >>> ', invitePass);
+     console.log('Generated password for user ' + email + ' >>> ', invitePass);
      Accounts.createUser({
        username: email,
        email: email,
@@ -67,7 +67,7 @@ Meteor.methods({
     var inviteId = PendingUsers.insert(inviteInfo);
     if (!Meteor.users.findOne({ username: email })) {
      var invitePass = Random.id();
-     console.log('Generated password for user' + email + ' >>> ', invitePass);
+     console.log('Generated password for user ' + email + ' >>> ', invitePass);
      Accounts.createUser({
        username: email,
        email: email,
@@ -198,7 +198,6 @@ function notifyPendingCollaborator(inviteId, app, email, invitePass) {
   var options = EmailConfig.from;
 
   if (typeof invitePass !== 'undefined') {
-    console.log('Password for user' + email + ' >>> ', invitePass);
     options.html = EmailTemplates.notifyForNewCollaborator({
       appLink: appUrl,
       inviteUrl: inviteUrl,
@@ -230,7 +229,6 @@ function notifyPendingOwner(inviteId, app, email, invitePass) {
   var options = EmailConfig.from;
   
   if (typeof invitePass !== 'undefined') {
-    console.log('Password for user' + email + ' >>> ', invitePass);
     options.html = EmailTemplates.notifyForNewOwner({
       appLink: appUrl,
       inviteUrl: inviteUrl,
