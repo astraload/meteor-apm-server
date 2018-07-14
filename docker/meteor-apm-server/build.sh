@@ -27,9 +27,13 @@ if [ ! `pwd` == $root_directory ] ; then
   cd $root_directory
 fi
 
-# Set up environment for Mac
-if [ "$(uname)" == "Darwin" ]; then
-  source docker/meteor-apm-server/docker-machine-setup.sh
+#set up sudo for Linux
+sudo=sudo
+INGROUP=`groups $USER | grep docker`
+if [ "$?" != "1" ]; then
+  sudo=
+elif [ "$(uname)" == "Darwin" ]; then
+  sudo=
 fi
 ################## docker setup ######################
 
@@ -51,15 +55,6 @@ fi
 }
 
 #checkRepo
-
-#set up sudo for Linux
-sudo=sudo
-INGROUP=`groups $USER | grep docker`
-if [ "$?" != "1" ]; then
-  sudo=
-elif [ "$(uname)" == "Darwin" ]; then
-  sudo=
-fi
 
 function buildImage {
   
