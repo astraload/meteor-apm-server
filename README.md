@@ -28,9 +28,9 @@ The build script uses our meteor-base images for building and running meteor app
 
 If running on new Replica Set, the app creates 'admin' user:
 email: admin@admin.com
-password: admin
+password: 'admin' by default, or from ADMIN_PASSWORD environment variable.
 
-When inviting new users to collaborate or own the app, new entries are added to the collection 'users' with their emails as login and 'kadira2018' as password. Then ivitation link is sended using settings from 'MAIL_URL' environment variable. Users can change their passwords after logon.
+When inviting new users to collaborate or own the app, new entries are added to the collection 'users' with their emails as logins and rendomly generated password. Then ivitation link is sended using settings from 'MAIL_URL' environment variable. Users can change their passwords after logon.
 
 If you don't have any mail server settings, you can manually add users to the app in 'apps' collection:
 ```

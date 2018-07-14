@@ -1,7 +1,17 @@
 EmailTemplates = {};
 
 var newCollabTmpl = i18n('share.collaborator_invite_email_tmpl');
+
+if (newUser) {
+ newCollabTmpl = i18n('share.new_collaborator_invite_email_tmpl');
+}
+
 EmailTemplates.notifyNewCollaborator = _.template(newCollabTmpl);
 
 var newOwnerTemp = i18n('share.notify_new_owner_email_templ');
+
+if (newUser) {
+ newOwnerTemp = i18n('share.notify_for_new_owner_email_templ');
+}
+
 EmailTemplates.notifyNewOwner = _.template(newOwnerTemp);
