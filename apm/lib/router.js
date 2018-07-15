@@ -228,5 +228,5 @@ function resoultionsToRanges(context, redirect) {
 }
 
 function setTitles() {
-  document.title = 'Kadira - Performance Monitoring for Meteor Apps';
+  document.title = 'Meteor APM - Performance Monitoring for Meteor Apps';
 }
