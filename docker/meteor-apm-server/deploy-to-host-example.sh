@@ -17,6 +17,12 @@ ROOT_URL='https://'$HOSTNAME
 PORT=3000
 ADMIN_PASSWORD=admin2018
 METRICS_LIFETIME=604800000
+## Options below set rate limit for all requests
+## Important if you collect data from many instances with the same appId
+## limit => 15 req/s, traces => 100 traces/request
+#RATE_LIMIT=100
+#RESET_TIMEOUT=10000
+#TOTAL_TRACES=1000
 
 function launchServiceOnServer {
   echo "
@@ -25,27 +31,30 @@ function launchServiceOnServer {
   ssh -i $key ubuntu@$1 bash -c "         \
     echo 'Logging in...'                ; \
     docker tag $dockerImageName $dockerImageName:old 2>/dev/null ; \
-    docker pull $dockerImageName       && \
-    docker rm -fv apm &>/dev/null       ; \
-    sleep 2                             ; \
-    docker run -d                         \
-     --name apm                           \
-     --hostname $1                        \
-     -p 3000:3000                         \
-     -p 11011:11011                       \
-     -p 7007:7007                         \
-     -v /knotel/apm:/logs                 \
-     -e MONGO_URL=$MONGO_URL              \
-     -e MONGO_OPLOG_URL=$MONGO_OPLOG_URL  \
-     -e MAIL_URL=$MAIL_URL                \
-     -e MAIL_DOMAIN=$MAIL_DOMAIN          \
-     -e ENGINE_PORT=$ENGINE_PORT          \
-     -e API_PORT=$API_PORT                \
-     -e ROOT_URL=$ROOT_URL                \
-     -e PORT=$PORT                        \
-    -e ADMIN_PASSWORD=$ADMIN_PASSWORD     \
-    -e METRICS_LIFETIME=$METRICS_LIFETIME \
-    $dockerImageName                   && \
+    docker pull $dockerImageName        && \
+    docker rm -fv apm &>/dev/null        ; \
+    sleep 2                              ; \
+    docker run -d                          \
+     --name apm                            \
+     --hostname $1                         \
+     -p 3000:3000                          \
+     -p 11011:11011                        \
+     -p 7007:7007                          \
+     -v /knotel/apm:/logs                  \
+     -e MONGO_URL=$MONGO_URL               \
+     -e MONGO_OPLOG_URL=$MONGO_OPLOG_URL   \
+     -e MAIL_URL=$MAIL_URL                 \
+     -e MAIL_DOMAIN=$MAIL_DOMAIN           \
+     -e ENGINE_PORT=$ENGINE_PORT           \
+     -e API_PORT=$API_PORT                 \
+     -e ROOT_URL=$ROOT_URL                 \
+     -e PORT=$PORT                         \
+     -e ADMIN_PASSWORD=$ADMIN_PASSWORD     \
+     -e METRICS_LIFETIME=$METRICS_LIFETIME \
+     -e RATE_LIMIT=$RATE_LIMIT             \
+     -e RESET_TIMEOUT=$RESET_TIMEOUT       \
+     -e TOTAL_TRACES=$TOTAL_TRACES         \
+    $dockerImageName                    && \
     docker rmi $dockerImageName:old 2>/dev/null"
 }
 
