@@ -38,11 +38,14 @@ app.use(require('./lib/middlewares/appinfo'));
 // rate limit all requests from this point
 // limit => 15 req/s, traces => 100 traces/request
 // Note: Drops all requests without an appId.
+var limit = process.env.RATE_LIMIT;
+var resetTimeout = process.env.RESET_TIMEOUT;
+var limitTotalTraces = process.env.TOTAL_TRACES;
 app.use(
   require('./lib/middlewares/ratelimit')({
-    limit: 30,
-    resetInterval: 2000,
-    limitTotalTraces: 200
+    limit: limit,
+    resetTimeout: resetTimeout,
+    limitTotalTraces: limitTotalTraces
   })
 );
 
