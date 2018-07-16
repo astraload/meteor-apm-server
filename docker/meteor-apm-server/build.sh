@@ -71,15 +71,20 @@ function buildImage {
     echo -e "Docker image $1 not found.\n"
     echo -e "Building new one.\n"
     $sudo docker build -t $1 $Dockerfile .
+    $sudo docker tag $1 $1:$commitHash
   else
     echo -e "Setting tag "old" for existing image.\n"
     $sudo docker tag $1 $1:old
     echo -e "Building new one.\n"
     $sudo docker build -t $1 $Dockerfile . || exit 1
+    $sudo docker tag $1 $1:$commitHash
     echo -e "Removing old-tagged image.\n"
     $sudo docker rmi -f $1:old
   fi
 }
+
+commitHash=$(git rev-parse HEAD)
+echo "Commit hash: $commitHash"
 
 for image in "${images[@]}"
 do
