@@ -41,6 +41,7 @@ app.use(require('./lib/middlewares/appinfo'));
 var limit = process.env.RATE_LIMIT;
 var resetTimeout = process.env.RESET_TIMEOUT;
 var limitTotalTraces = process.env.TOTAL_TRACES;
+console.log('rate limit in server.js for appId: ', appId, ' is ', limit);
 app.use(
   require('./lib/middlewares/ratelimit')({
     limit: limit,

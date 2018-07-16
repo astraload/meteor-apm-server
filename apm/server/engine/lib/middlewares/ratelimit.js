@@ -3,7 +3,7 @@ module.exports = function(config) {
   config.limit = config.limit || 10;
   config.resetTimeout = config.resetTimeout || 1000;
   config.limitTotalTraces = config.limitTotalTraces || 100;
-
+  console.log('rate limit in ratelimit.js for appId: ', appId, ' is ', config.limit);
   var ratesPerApp = {};
 
   setInterval(function() {
@@ -23,9 +23,8 @@ module.exports = function(config) {
 
     ratesPerApp[appId] = ratesPerApp[appId] || 0;
     ratesPerApp[appId]++;
-
     if (ratesPerApp[appId] > config.limit) {
-      console.warn('blocked due to high throughput - appId: ', appId);
+      console.warn('blocked due to high throughput - appId: ', appId, '>>>>', config.limit);
       res.writeHead(429);
       res.end();
     } else if (totalTraceLimitExceeds(data)) {
@@ -33,6 +32,7 @@ module.exports = function(config) {
       res.writeHead(430);
       res.end();
     } else {
+      console.log('rate limit in ratelimit.js cirle for appId: ', appId, ' is ', config.limit);
       next();
     }
   };
