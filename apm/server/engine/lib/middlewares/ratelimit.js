@@ -3,7 +3,7 @@ module.exports = function(config) {
   config.limit = config.limit || 10;
   config.resetTimeout = config.resetTimeout || 1000;
   config.limitTotalTraces = config.limitTotalTraces || 100;
-  console.log('rate limit in ratelimit.js for appId: ', appId, ' is ', config.limit);
+  console.log('rate limit in ratelimit.js is ', config.limit);
   var ratesPerApp = {};
 
   setInterval(function() {
