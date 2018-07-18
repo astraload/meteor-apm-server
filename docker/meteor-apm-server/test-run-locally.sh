@@ -47,10 +47,8 @@ MAIL_URL='smtp://apm%40mydomainmail.com:mypassword@smtp.mailgun.org:587'
 MAIL_DOMAIN=$HOSTNAME
 ENGINE_PORT=11011
 API_PORT=7007
-ROOT_URL='http://'$HOSTNAME
+ROOT_URL='http://localhost'
 PORT=3000
-ADMIN_PASSWORD=admin2018
-METRICS_LIFETIME=604800000
 
 $sudo docker run -d                       \
     --name apm                            \
@@ -67,8 +65,6 @@ $sudo docker run -d                       \
     -e API_PORT=$API_PORT                 \
     -e ROOT_URL=$ROOT_URL                 \
     -e PORT=$PORT                         \
-    -e ADMIN_PASSWORD=$ADMIN_PASSWORD     \
-    -e METRICS_LIFETIME=$METRICS_LIFETIME \
     --link apm-mongo:apm-mongo            \
     $dockerImageName:$dockerTag
 

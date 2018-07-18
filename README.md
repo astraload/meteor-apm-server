@@ -77,6 +77,20 @@ The default value is 604800000 (1000 * 60 * 60 * 24 * 7 ^= 7 days). You can set 
 -e METRICS_LIFETIME=259200000
 ```
 
+Another important thing is about rate limits for all requests. Defaults are set in `server/engine/lib/middlewares/ratelimit.js`:
+```
+limit = 10
+resetTimeout = 1000
+limitTotalTraces = 100
+```
+If multiple servers use the same appId or there is a heavy webapp activity, there are possible errors like `Kadira Error: Agent Error: 429` (too many requests) in your Meteor app logs or tons of `blocked due to high throughput - appId: <your appId>` in APM server logs. 
+So rate limit defaults can be overrided by defining environment variables `RATE_LIMIT`, `RESET_TIMEOUT` and `TOTAL_TRACES`.
+```
+-e RATE_LIMIT=100
+-e RESET_TIMEOUT=1000
+-e TOTAL_TRACES=1000
+```
+
 ## Connect your app to Meteor APM server via Meteor Settings:
 1) . Add following into your `settings.json` file:
 ```
