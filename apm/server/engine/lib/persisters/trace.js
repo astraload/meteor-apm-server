@@ -6,6 +6,7 @@ var async = require('async');
 
 const ErrorStackParser = require('error-stack-parser');
 import {SourceMapConsumer} from 'source-map';
+
 const fetch = require('node-fetch');
 const URL_REGEXP = "^(([^:/\\?#]+):)?(//(([^:/\\?#]*)(?::([^/\\?#]*))?))?([^\\?#]*)(\\?([^#]*))?(#(.*))?$";
 const rx = new RegExp(URL_REGEXP);
@@ -133,7 +134,7 @@ async function mapErrorStack(compressedTraces) {
             trace.stacks = mapStackTrace(trace.stacks, sourceMapsConsumer[srcHash], errorMessage);
 
           } catch (err) {
-            console.error('error when fetching source map ' + soureMapUrl + ':', err.message);
+            console.error('error when fetching source map ' + soureMapUrl + ' with hash ' + srcHash + ': ', err.message);
             delete sourceMapsConsumer[srcHash];
           }
 
