@@ -26,6 +26,7 @@ module.exports = function(appDb) {
       return reply(req, res, 'errors should be an array');
     }
 
+    console.log('received error: ', data);
     // make sure errors are valid
     // TODO improve error validation
     var errors = [];
