@@ -8,7 +8,7 @@ const ErrorStackParser = require('error-stack-parser');
 import {SourceMapConsumer} from 'source-map';
 
 const fetch = require('node-fetch');
-const URL_REGEXP = "^(([^:/\\?#]+):)?(//(([^:/\\?#]*)(?::([^/\\?#]*))?))?([^\\?#]*)(\\?([^#]*))?(#(.*))?$";
+const URL_REGEXP = '^(([^:/\\?#]+):)?(//(([^:/\\?#]*)(?::([^/\\?#]*))?))?([^\\?#]*)(\\?([^#]*))?(#(.*))?$';
 const rx = new RegExp(URL_REGEXP);
 const sourceMapsConsumer = {};
 
@@ -67,11 +67,11 @@ function mapStackTrace(traceStacks, consumer, message) {
       const parsedError = ErrorStackParser.parse(error);
 
       parsedError.forEach((trace) => {
-        const map = consumer.originalPositionFor({
+        const map = trace.lineNumber ? consumer.originalPositionFor({
           line: trace.lineNumber,
           column: trace.columnNumber
-        });
-        trace.map = map;
+        }) : {};
+
         if (map.line) {
           mappedStack = `${mappedStack}${trace.source} (${map.source}:${map.line}:${map.column})\n`;
         } else {
@@ -100,15 +100,12 @@ async function mapErrorStack(compressedTraces) {
 
       if (trace.hash && trace.sourceMap === 'true') {
         srcHash = trace.hash;
-
       }
 
 
-      const errorMessage = trace.name ? trace.name : 'Undefined error';
-
       if (appUrl && srcHash) {
-        const soureMapUrl = appUrl + '/app.js.map';
-
+        const sourceMapUrl = appUrl + '/app.js.map';
+        const errorMessage = trace.name ? `App hash: ${srcHash} \n${trace.name}` : 'Undefined error';
 
         if (!sourceMapsConsumer[srcHash]) {
 
@@ -118,28 +115,28 @@ async function mapErrorStack(compressedTraces) {
             const headers = {
               'x-auth-token': appSecret,
             };
-            console.log(`Get source-map from ${soureMapUrl} for hash:${srcHash}`);
-            const sourceMap = await fetch(soureMapUrl, {headers})
-              .then((res) => {
-                  if (res.status !== 200) {
-                    throw new Error('' + res.status + ' response');
-                  } else {
-                    return res.text();
-                  }
-                }
-              );
-            const jsonSourceMap = parseSourceMapInput(sourceMap);
-            sourceMapsConsumer[srcHash] = await new SourceMapConsumer(jsonSourceMap);
 
+            console.log(`Get source-map from ${sourceMapUrl} for hash:${srcHash}`);
+
+            const sourceMapResponse = await fetch(sourceMapUrl, {headers});
+
+            if (sourceMapResponse.status !== 200) {
+              throw new Error('got ' + sourceMapResponse.status + ' response');
+            }
+
+            const sourceMapText = await sourceMapResponse.text();
+            const jsonSourceMap = await parseSourceMapInput(sourceMapText);
+            sourceMapsConsumer[srcHash] = await new SourceMapConsumer(jsonSourceMap);
             trace.stacks = mapStackTrace(trace.stacks, sourceMapsConsumer[srcHash], errorMessage);
 
           } catch (err) {
-            console.error('error when fetching source map ' + soureMapUrl + ' with hash ' + srcHash + ': ', err.message);
+
+            console.error('error when fetching source map ' + sourceMapUrl + ' with hash ' + srcHash + ': ', err.message);
             delete sourceMapsConsumer[srcHash];
+
           }
 
         } else {
-          sourceMapsConsumer[srcHash];
           trace.stacks = mapStackTrace(trace.stacks, sourceMapsConsumer[srcHash], errorMessage);
 
         }
@@ -153,3 +150,4 @@ function getAppSecret(appId) {
   const app = Apps.findOne({_id: appId});
   return app.secret;
 }
+
