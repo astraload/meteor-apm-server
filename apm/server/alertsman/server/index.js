@@ -22,7 +22,7 @@ const {
   TICK_TRIGGER_INTERVAL = 1000 * 10,
   MESSENGER_LOGGING_ONLY,
   GOOGLE_DEV_KEY,
-  MAIL_DOMAIN = 'kadira.io',
+  MAIL_DOMAIN = 'dummydomain.com',
   MAIL_FROM = `Kadira Alerts <alerts-noreply@${MAIL_DOMAIN}>`
 } = process.env;
 
