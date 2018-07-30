@@ -141,6 +141,7 @@ export default class Alert {
     // That's why we need to remove 29 minutes from the time
     const midTime = time - 29 * 60 * 1000;
     /* eslint-disable max-len */
+    //TODO: use process.env here
     return Meteor.absoluteUrl(`apps/${appId}/${info.urlTab}/?range=3600000&date=${midTime}`);
     /* eslint-enable max-len */
   }

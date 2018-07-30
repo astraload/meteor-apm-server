@@ -1,14 +1,14 @@
 /* eslint max-len:0 */
 
-import { Email } from 'meteor/email';
+import {Email} from 'meteor/email';
 import Fiber from 'fibers';
-import { fromString } from 'html-to-text';
-import { isSlackUrl } from './utils';
-import { parse } from 'url';
+import {fromString} from 'html-to-text';
+import {isSlackUrl} from './utils';
+import {parse} from 'url';
 import promiseRetry from 'promise-retry';
 
 const debug = require('debug')('alertsman:messenger');
-const { error, info } = console;
+const {error, info} = console;
 
 const retryOptions = {
   retries: 5,
@@ -18,17 +18,18 @@ const retryOptions = {
 };
 
 export default class Messenger {
-  constructor(mailUrl, options = {}) {
+  constructor(mailUrl, mailFrom, options = {}) {
     this.mailUrl = mailUrl || 'smtp://user:pass@smtp.host:465';
     this.loggingOnly = options.loggingOnly;
+    this.mailFrom = mailFrom;
 
-    const { auth, port, hostname } = parse(this.mailUrl);
+    const {auth, port, hostname} = parse(this.mailUrl);
 
     const smtpOptions = {
       host: hostname,
       secure: port === '465',
       port: port || 25,
-      auth: { user: auth.split(':')[0], pass: auth.split(':')[1] }
+      auth: {user: auth.split(':')[0], pass: auth.split(':')[1]}
     };
   }
 
@@ -63,7 +64,7 @@ export default class Messenger {
     triggers.forEach(trigger => {
       switch (trigger.type) {
         case 'email':
-          const { subject, body } = emailPayload;
+          const {subject, body} = emailPayload;
           trigger.params.addresses.forEach(address => {
             triggerPromises.push(this._sendEmail(address, subject, body));
           });
@@ -92,7 +93,7 @@ export default class Messenger {
     }
 
     const mailOptions = {
-      from: 'Kadira Alerts <alerts-noreply@kadira.io>',
+      from: this.mailFrom,
       to: address,
       subject,
       text: fromString(message),
@@ -122,7 +123,7 @@ export default class Messenger {
 
     let retryPromise = promiseRetry(retry => {
       try {
-        return HTTP.post(uri, { uri, data: params });
+        return HTTP.post(uri, {uri, data: params});
       } catch (e) {
         console.error(e);
         retry();
