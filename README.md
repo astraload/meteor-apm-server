@@ -71,6 +71,8 @@ Adding user as a collaborator to the app in 'apps' collection:
 
 
 ## Meteor apm settings
+Environment variable `MAIL_FROM` allow redefining the from field in Alert emails.
+
 Environment variable `METRICS_LIFETIME` sets the maximum lifetime of the metrics. Old metrics are removed after each aggregation.
 The default value is 604800000 (1000 * 60 * 60 * 24 * 7 ^= 7 days). You can set any custom value (for ex. 259200000 = 3 days) with:
 ```

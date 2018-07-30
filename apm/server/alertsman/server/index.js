@@ -9,10 +9,10 @@ import MongoOplog from 'mongo-oplog';
 import RuleEngine from './rules/engine';
 import TickManager from './tick_manager';
 import parseMongoUrl from 'parse-mongo-url';
-import { processAlone } from './utils';
+import {processAlone} from './utils';
 
 const debug = require('debug')('alertsman:index');
-const { info, error } = console;
+const {info, error} = console;
 
 const {
   MONGO_URL,
@@ -21,12 +21,13 @@ const {
   MAIL_URL,
   TICK_TRIGGER_INTERVAL = 1000 * 10,
   MESSENGER_LOGGING_ONLY,
-  GOOGLE_DEV_KEY
+  GOOGLE_DEV_KEY,
+  MAIL_FROM = 'Kadira Alerts <alerts-noreply@kadira.io>'
 } = process.env;
 
 const parsedUrl = parseMongoUrl(MONGO_URL);
 const oplogFilterNs = `${parsedUrl.dbName}.alerts`;
-const oplogConn = MongoOplog(MONGO_OPLOG_URL, { ns: oplogFilterNs });
+const oplogConn = MongoOplog(MONGO_OPLOG_URL, {ns: oplogFilterNs});
 const alertsStore = new AlertsStore(oplogConn);
 
 const tickManager = new TickManager({
@@ -34,7 +35,7 @@ const tickManager = new TickManager({
 });
 const metricsStore = new MetricsStore(KADIRA_API_URL);
 const rules = new RuleEngine();
-const messenger = new Messenger(MAIL_URL, {
+const messenger = new Messenger(MAIL_URL, MAIL_FROM, {
   loggingOnly: Boolean(MESSENGER_LOGGING_ONLY)
 });
 
