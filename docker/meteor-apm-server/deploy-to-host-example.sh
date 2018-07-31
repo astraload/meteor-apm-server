@@ -10,10 +10,10 @@ dockerImageName=knotel/meteor-apm-server
 MONGO_URL='mongodb://apm.db.mydomain.com/apm-app?replicaSet=apmRS'
 MONGO_OPLOG_URL='mongodb://apm.db.mydomain.com/local?replicaSet=apmRS'
 MAIL_URL='smtp://apm%40mydomainmail.com:mypassword@smtp.mailgun.org:587'
-MAIL_DOMAIN=$HOSTNAME
+MAIL_DOMAIN=apm.mydomain.com
 ENGINE_PORT=11011
 API_PORT=7007
-ROOT_URL='https://'$HOSTNAME
+## Assume NGINX is configured to use container's 3000 port as a backend
 PORT=3000
 ADMIN_PASSWORD=admin2018
 METRICS_LIFETIME=604800000
@@ -47,7 +47,6 @@ function launchServiceOnServer {
      -e MAIL_DOMAIN=$MAIL_DOMAIN           \
      -e ENGINE_PORT=$ENGINE_PORT           \
      -e API_PORT=$API_PORT                 \
-     -e ROOT_URL=$ROOT_URL                 \
      -e PORT=$PORT                         \
      -e ADMIN_PASSWORD=$ADMIN_PASSWORD     \
      -e METRICS_LIFETIME=$METRICS_LIFETIME \

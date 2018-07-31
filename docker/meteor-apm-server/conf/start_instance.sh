@@ -8,6 +8,10 @@ if ! [ -n "$BASH_VERSION" ];then
     exit;
 fi
 
+if [ -z "$ROOT_URL" ]
+ then export ROOT_URL='https://'${APM_HOST:-$HOSTNAME}
+fi
+
 cd /built_app
 
 mkdir -p /logs

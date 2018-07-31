@@ -48,7 +48,7 @@ MAIL_DOMAIN=$HOSTNAME
 ENGINE_PORT=11011
 API_PORT=7007
 ROOT_URL='http://localhost'
-PORT=3000
+PORT=80
 
 $sudo docker run -d                       \
     --name apm                            \
