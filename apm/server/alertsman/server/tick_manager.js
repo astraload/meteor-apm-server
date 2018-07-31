@@ -1,9 +1,9 @@
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
 import Fiber from 'fibers';
 import _ from 'lodash';
 
 const debug = require('debug')('alertsman:tickManager');
-const { warn } = console;
+const {warn} = console;
 
 export default class TickManager extends EventEmitter {
   constructor(options = {}) {
@@ -25,12 +25,15 @@ export default class TickManager extends EventEmitter {
     this.alertTimers[alert.getId()] = timerInfo;
 
     const fireAlert = () => {
+      debug(`emit fire`);
       this.emit('fire', alert);
     };
 
     timerInfo.init = setTimeout(() => {
       Fiber(() => {
+        debug(`init with fireAlert()`);
         fireAlert();
+
         timerInfo.forever = setInterval(fireAlert, this.triggerInterval);
       }).run();
     }, this.getRandomWait());
@@ -52,7 +55,7 @@ export default class TickManager extends EventEmitter {
   }
 
   getRandomWait() {
-    return Math.ceil(Math.random() * this.triggerInterval);
+    return Math.ceil(Math.random() * this.triggerInterval + 5000);
   }
 
   close() {

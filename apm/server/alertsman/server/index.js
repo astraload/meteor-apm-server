@@ -83,6 +83,7 @@ const handleFire = async alert => {
 tickManager.on('fire', async alert => {
   await processAlone(alert, async () => {
     try {
+      debug('tickManager fire alert:', alert);
       await handleFire(alert);
     } catch (ex) {
       error(ex.message);

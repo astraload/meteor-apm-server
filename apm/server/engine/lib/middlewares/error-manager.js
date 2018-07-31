@@ -3,6 +3,8 @@ var connect = require('connect');
 var stateManager = require('../stateManager');
 var engineUtils = require('../utils');
 
+const debug = require('debug')('middlewares:error-manager');
+
 var persisters = {
   collection: require('../persisters/collection'),
   trace: require('../persisters/trace')
@@ -25,8 +27,7 @@ module.exports = function(appDb) {
       console.warn('data.errors should be an array');
       return reply(req, res, 'errors should be an array');
     }
-    // TODO remove then done
-    console.log('received error: ', data);
+    debug('received error: ', data);
     // make sure errors are valid
     // TODO improve error validation
     var errors = [];
