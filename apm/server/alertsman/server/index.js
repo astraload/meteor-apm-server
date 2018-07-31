@@ -23,7 +23,7 @@ const {
   MESSENGER_LOGGING_ONLY,
   GOOGLE_DEV_KEY,
   MAIL_DOMAIN = 'dummydomain.com',
-  MAIL_FROM = 'Kadira Alerts <alerts-noreply@' + MAIL_DOMAIN + '>',
+  MAIL_FROM = 'APM Alerts <alerts-noreply@' + MAIL_DOMAIN + '>',
 } = process.env;
 
 const parsedUrl = parseMongoUrl(MONGO_URL);
